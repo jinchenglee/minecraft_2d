@@ -1,5 +1,6 @@
 # Import libraries that we'll use
 import pygame, sys 
+import random
 
 # Import some useful constants
 from pygame.locals import *
@@ -21,6 +22,7 @@ COAL = 3
 COTTON = 4
 ROCK = 5
 LAVA = 6
+DIAMOND = 7
 
 # A dictionary linking resources to textures
 resource_dir = './resources/'
@@ -31,27 +33,46 @@ textures = {
             COAL    : pygame.image.load(resource_dir+'coal.png'),
             COTTON  : pygame.image.load(resource_dir+'cotton.png'),
             ROCK    : pygame.image.load(resource_dir+'rock.png'),
-            LAVA    : pygame.image.load(resource_dir+'lava.png')
+            LAVA    : pygame.image.load(resource_dir+'lava.png'),
+            DIAMOND : pygame.image.load(resource_dir+'diamond.png')
         }
-
-# Aa list representing our tilemap
-tilemap = [
-            [GRASS, COAL, DIRT, COTTON, COAL],
-            [WATER, COTTON, GRASS ,DIRT, WATER],
-            [COTTON, GRASS, WATER, GRASS, COTTON],
-            [DIRT, GRASS, COAL, WATER, ROCK],
-            [GRASS, WATER, LAVA, GRASS, DIRT]
-        ]
 
 # Useful game dimensions
 TILESIZE = 40
-MAPWIDTH = 5
-MAPHEIGHT = 5 
+MAPWIDTH = 15
+MAPHEIGHT = 20
+
+# Aa list representing our tilemap
+tilemap = [ [ DIRT for w in range(MAPWIDTH)] for h in range(MAPHEIGHT)]
 
 # Set up display
 pygame.init() 
 # Create a new drawing surface, width=?, height=?
 DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE,MAPHEIGHT*TILESIZE))
+# Change the ratio of different resources
+for rw in range(MAPHEIGHT):
+    for cl in range(MAPWIDTH):
+        # pick a random number between 0 and 20
+        randomNumber = random.randint(0,30)
+        # if a zero, then the tile is a coal
+        if randomNumber == 0:
+            tile = DIAMOND
+        elif randomNumber == 1 or randomNumber == 2:
+            tile = COTTON
+        elif randomNumber == 3 or randomNumber == 4:
+            tile = LAVA
+        elif randomNumber == 5 or randomNumber == 6:
+            tile = ROCK
+        elif randomNumber == 7:
+            tile = COAL
+        elif randomNumber >= 8 and randomNumber <= 13:
+            tile = WATER
+        elif randomNumber >= 14 and randomNumber <= 20:
+            tile = GRASS
+        else:
+            tile = DIRT
+        # set the position in the map 
+        tilemap[rw][cl] = tile
 
 # Give the window a caption
 pygame.display.set_caption("james's 2D World")
