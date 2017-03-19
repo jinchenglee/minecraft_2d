@@ -77,6 +77,11 @@ for rw in range(MAPHEIGHT):
 # Give the window a caption
 pygame.display.set_caption("james's 2D World")
 
+#the position of the player
+playerPos = [3,3]
+# Add player to the map
+PLAYER = pygame.image.load('resources/player.png').convert_alpha()
+
 # loop (repeat) forever
 while True:
     # get all the user events
@@ -86,6 +91,17 @@ while True:
             # end the game and close the window
             pygame.quit()
             sys.exit()
+        # If a key is pressed
+        elif event.type==KEYDOWN:
+            # if the right arrow is pressed
+            if (event.key==K_RIGHT) and playerPos[0] < MAPWIDTH-1:
+                playerPos[0] += 1
+            elif (event.key==K_LEFT) and playerPos[0] > 0:
+                playerPos[0] -= 1
+            elif (event.key==K_UP) and playerPos[1] > 0:
+                playerPos[1] -= 1
+            elif (event.key==K_DOWN) and playerPos[1] < MAPHEIGHT-1:
+                playerPos[1] += 1
 
     # Loop through each row
     for row in range(MAPHEIGHT):
@@ -93,5 +109,8 @@ while True:
         for column in range(MAPWIDTH):
             DISPLAYSURF.blit(textures[tilemap[row][column]], (column*TILESIZE, row*TILESIZE))
 
+    # Display the player
+    DISPLAYSURF.blit(PLAYER, (playerPos[0]*TILESIZE, playerPos[1]*TILESIZE))
+    
     # update the display
     pygame.display.update()
